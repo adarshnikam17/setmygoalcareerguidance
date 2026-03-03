@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - SetMyGoal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #4F8EF7;
+            --accent2: #a259ff;
+            --accent-grad: linear-gradient(135deg, #4F8EF7 0%, #a259ff 100%);
+            --bg: #0d0f14;
+            --bg2: #13161e;
+            --surface: #1e2330;
+            --border: rgba(255,255,255,0.07);
+            --text: #f0f2f8;
+            --text2: #8b92a8;
+            --text3: #5a6180;
+            --navbar-bg: rgba(13,15,20,0.9);
+            --input-bg: #13161e;
+            --label: #9ba3bb;
+        }
+        [data-theme="light"] {
+            --bg: #f4f6fb;
+            --bg2: #edf0f7;
+            --surface: #ffffff;
+            --border: rgba(0,0,0,0.09);
+            --text: #111827;
+            --text2: #4b5563;
+            --text3: #9ca3af;
+            --navbar-bg: rgba(244,246,251,0.92);
+            --input-bg: #f4f6fb;
+            --label: #6b7280;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-top: 72px;
+            transition: background 0.3s, color 0.3s;
+        }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Sora', sans-serif; color: var(--text); }
+
+        /* ── Navbar ── */
+        .smg-navbar {
+            background: var(--navbar-bg) !important;
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 0;
+            transition: background 0.3s;
+        }
+        .smg-navbar-brand {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text) !important;
+            letter-spacing: -0.5px;
+        }
+        .smg-navbar-brand span {
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .smg-nav-link {
+            color: var(--text2) !important;
+            font-size: 0.88rem;
+            font-weight: 500;
+            padding: 6px 14px !important;
+            border-radius: 8px;
+            transition: color 0.2s, background 0.2s;
+        }
+        .smg-nav-link:hover { color: var(--text) !important; background: var(--surface); }
+        .btn-nav-login {
+            background: var(--accent-grad);
+            border: none;
+            color: #fff !important;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 7px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .btn-nav-login:hover { opacity: 0.88; }
+        .btn-nav-signup {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text) !important;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 7px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-nav-signup:hover { border-color: var(--accent); color: var(--accent) !important; }
+        .btn-theme {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-theme:hover { border-color: var(--accent); }
+
+        /* ── Page layout ── */
+        .page-wrapper {
+            display: flex;
+            min-height: calc(100vh - 72px);
+        }
+
+        /* Left decorative panel */
+        .left-panel {
+            display: none;
+            width: 480px;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        @media(min-width: 1024px) { .left-panel { display: block; } }
+
+        .left-panel-inner {
+            position: absolute; inset: 0;
+            background: linear-gradient(160deg, #0a0e1a 0%, #111627 50%, #0d1220 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 52px;
+        }
+        [data-theme="light"] .left-panel-inner {
+            background: linear-gradient(160deg, #dce4f5 0%, #e8edf8 50%, #d8e2f3 100%);
+        }
+
+        /* Grid decoration */
+        .left-panel-inner::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(79,142,247,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(79,142,247,0.06) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+
+        /* Glow orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            pointer-events: none;
+        }
+        .orb1 { width: 300px; height: 300px; background: rgba(79,142,247,0.1); top: -80px; right: -80px; }
+        .orb2 { width: 200px; height: 200px; background: rgba(162,89,255,0.08); bottom: 40px; left: -40px; }
+
+        .left-content { position: relative; z-index: 2; }
+
+        .left-logo {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 48px;
+        }
+        .left-logo span {
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .left-title {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+            color: var(--text);
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+        .left-sub {
+            font-size: 0.9rem;
+            color: var(--text2);
+            line-height: 1.7;
+            margin-bottom: 44px;
+        }
+
+        /* Feature pills */
+        .feature-list { display: flex; flex-direction: column; gap: 14px; }
+        .feature-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .feature-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--accent-grad);
+            flex-shrink: 0;
+        }
+        .feature-text { font-size: 0.85rem; color: var(--text2); }
+        .feature-text strong { color: var(--text); font-weight: 600; }
+
+        /* Student count badge */
+        .student-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(79,142,247,0.08);
+            border: 1px solid rgba(79,142,247,0.2);
+            border-radius: 100px;
+            padding: 8px 16px;
+            margin-top: 44px;
+        }
+        .student-avatars { display: flex; }
+        .student-avatars span {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            border: 2px solid var(--bg);
+            margin-left: -8px;
+            font-size: 0.65rem;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700;
+            color: #fff;
+        }
+        .student-avatars span:first-child { margin-left: 0; }
+        .av1 { background: #4F8EF7; }
+        .av2 { background: #a259ff; }
+        .av3 { background: #34d399; }
+        .av4 { background: #fbbf24; }
+        .student-badge-text { font-size: 0.78rem; color: var(--text2); }
+        .student-badge-text strong { color: var(--text); }
+
+        /* ── Right panel / form ── */
+        .right-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 420px;
+            animation: fadeUp 0.5s ease both;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        .login-header { text-align: center; margin-bottom: 32px; }
+        .login-header h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+        .login-header p { font-size: 0.88rem; color: var(--text2); }
+
+        /* ── Form fields ── */
+        .smg-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--label);
+            margin-bottom: 7px;
+            display: block;
+            letter-spacing: 0.2px;
+        }
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 7px;
+        }
+        .forgot-link {
+            font-size: 0.78rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .forgot-link:hover { text-decoration: underline; }
+
+        .smg-input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            padding: 12px 42px 12px 14px;
+            font-size: 0.9rem;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .smg-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(79,142,247,0.12);
+        }
+        .smg-input::placeholder { color: var(--text3); }
+        .smg-input.is-valid { border-color: #34d399; }
+
+        .input-wrap { position: relative; }
+        .input-icon {
+            position: absolute;
+            right: 14px; top: 50%;
+            transform: translateY(-50%);
+            color: var(--text3);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .input-icon:hover { color: var(--text2); }
+        .input-icon.valid { color: #34d399; pointer-events: none; }
+
+        /* Error message */
+        .error-msg {
+            background: rgba(248,113,113,0.08);
+            border: 1px solid rgba(248,113,113,0.25);
+            border-radius: 10px;
+            padding: 11px 14px;
+            font-size: 0.82rem;
+            color: #f87171;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            display: none;
+        }
+
+        /* Submit button */
+        .btn-submit {
+            width: 100%;
+            background: var(--accent-grad);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 13px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 4px 20px rgba(79,142,247,0.3);
+            margin-top: 8px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-submit:disabled { opacity: 0.6; transform: none; cursor: not-allowed; }
+
+        /* Spinner */
+        .spinner {
+            width: 16px; height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Divider */
+        .or-divider {
+            display: flex; align-items: center; gap: 12px;
+            margin: 20px 0;
+        }
+        .or-divider::before, .or-divider::after {
+            content: ''; flex: 1; height: 1px; background: var(--border);
+        }
+        .or-divider span { font-size: 0.78rem; color: var(--text3); }
+
+        /* Signup link */
+        .signup-link {
+            text-align: center;
+            font-size: 0.83rem;
+            color: var(--text2);
+            margin-top: 20px;
+        }
+        .signup-link a { color: var(--accent); text-decoration: none; font-weight: 600; }
+        .signup-link a:hover { text-decoration: underline; }
+
+        /* Trust badges */
+        .trust-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+        .trust-item {
+            display: flex; align-items: center; gap: 5px;
+            font-size: 0.72rem; color: var(--text3);
+        }
+        .trust-item i { color: var(--text3); font-size: 0.78rem; }
+    </style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar navbar-expand-lg smg-navbar fixed-top">
+    <div class="container">
+        <a class="navbar-brand smg-navbar-brand" href="index.html">Set<span>My</span>Goal</a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#authNav">
+            <i class="bi bi-list" style="font-size:1.4rem;color:var(--text)"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="authNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link smg-nav-link" href="index.html">Home</a></li>
+            </ul>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn-theme" id="themeToggle"><span id="themeIcon">🌙</span></button>
+                <a href="login.html" class="btn-nav-login">Login</a>
+                <a href="signup.html" class="btn-nav-signup">Sign up</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="page-wrapper">
+
+    <!-- ── Left Decorative Panel ── -->
+    <div class="left-panel">
+        <div class="left-panel-inner">
+            <div class="orb orb1"></div>
+            <div class="orb orb2"></div>
+            <div class="left-content">
+                <div class="left-logo">Set<span>My</span>Goal</div>
+
+                <h2 class="left-title">Your roadmap is<br>waiting for you.</h2>
+                <p class="left-sub">Log in to continue your journey — check your daily tasks, track your streak, and stay on path.</p>
+
+                <div class="feature-list">
+                    <div class="feature-row">
+                        <div class="feature-dot"></div>
+                        <div class="feature-text"><strong>Personalized Dashboard</strong> — your goals, your pace</div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-dot"></div>
+                        <div class="feature-text"><strong>Daily Task Tracker</strong> — stay consistent every day</div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-dot"></div>
+                        <div class="feature-text"><strong>Career Roadmap</strong> — step-by-step guidance</div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-dot"></div>
+                        <div class="feature-text"><strong>Streaks & Progress</strong> — see how far you've come</div>
+                    </div>
+                </div>
+
+                <div class="student-badge">
+                    <div class="student-avatars">
+                        <span class="av1">R</span>
+                        <span class="av2">A</span>
+                        <span class="av3">K</span>
+                        <span class="av4">S</span>
+                    </div>
+                    <div class="student-badge-text"><strong>10,000+</strong> students already on track</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Right Panel / Form ── -->
+    <div class="right-panel">
+        <div class="login-box">
+
+            <div class="login-header">
+                <h2>Welcome back 👋</h2>
+                <p>Log in to see your roadmap, tasks and streaks.</p>
+            </div>
+
+            <!-- Error banner (shown by Java on bad login) -->
+            <div class="error-msg" id="errorMsg">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span id="errorText">Invalid email or password. Please try again.</span>
+            </div>
+
+            <!-- Success banner (shown after registration) -->
+<div class="error-msg" id="successMsg" style="
+    background: rgba(52,211,153,0.08);
+    border: 1px solid rgba(52,211,153,0.25);
+    color: #34d399;
+    display: none;
+">
+    <i class="bi bi-check-circle-fill"></i>
+    <span>Registered Successfully! Please login to continue.</span>
+</div>
+
+            <form action="login" method="post" id="loginForm">
+
+                <div class="mb-3">
+                    <label class="smg-label">Email Address</label>
+                    <div class="input-wrap">
+                        <input type="email" name="email" id="emailInput" class="smg-input" required placeholder="you@example.com" autocomplete="email">
+                        <i class="bi bi-envelope input-icon" id="emailIcon"></i>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <div class="label-row">
+                        <label class="smg-label" style="margin-bottom:0">Password</label>
+                        <a href="#" class="forgot-link">Forgot password?</a>
+                    </div>
+                    <div class="input-wrap">
+                        <input type="password" name="password" id="pwInput" class="smg-input" required placeholder="••••••••" autocomplete="current-password">
+                        <i class="bi bi-eye-slash input-icon" id="pwToggle" onclick="togglePw()"></i>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <div class="spinner" id="spinner"></div>
+                    <span id="btnText"><i class="bi bi-box-arrow-in-right me-1"></i> Continue to dashboard</span>
+                </button>
+            </form>
+
+            <div class="or-divider"><span>New here?</span></div>
+
+            <div style="text-align:center;">
+                <a href="signup.html" style="
+                    display:inline-block;
+                    width:100%;
+                    text-align:center;
+                    border: 1.5px solid var(--border);
+                    border-radius: 10px;
+                    padding: 12px;
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    color: var(--text);
+                    text-decoration: none;
+                    transition: all 0.2s;
+                    background: transparent;
+                " onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+                   onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'">
+                    Create a free account
+                </a>
+            </div>
+
+            <div class="trust-row">
+                <div class="trust-item"><i class="bi bi-shield-lock"></i> Secure login</div>
+                <div class="trust-item"><i class="bi bi-lock"></i> Data encrypted</div>
+                <div class="trust-item"><i class="bi bi-person-check"></i> Students only</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    /* ── Theme ── */
+    const html = document.documentElement;
+    const saved = localStorage.getItem('smg-theme') || 'dark';
+    html.setAttribute('data-theme', saved);
+    document.getElementById('themeIcon').textContent = saved === 'dark' ? '🌙' : '☀️';
+    document.getElementById('themeToggle').addEventListener('click', () => {
+        const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        document.getElementById('themeIcon').textContent = next === 'dark' ? '🌙' : '☀️';
+        localStorage.setItem('smg-theme', next);
+    });
+
+    /* ── Email live validation ── */
+    document.getElementById('emailInput').addEventListener('input', function() {
+        const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value);
+        const icon = document.getElementById('emailIcon');
+        icon.className = ok ? 'bi bi-envelope-check input-icon valid' : 'bi bi-envelope input-icon';
+    });
+
+    /* ── Toggle password ── */
+    function togglePw() {
+        const pw = document.getElementById('pwInput');
+        const icon = document.getElementById('pwToggle');
+        const show = pw.type === 'password';
+        pw.type = show ? 'text' : 'password';
+        icon.className = `bi bi-eye${show ? '' : '-slash'} input-icon`;
+    }
+
+    /* ── Submit: show spinner ── */
+    document.getElementById('loginForm').addEventListener('submit', function() {
+        document.getElementById('spinner').style.display = 'block';
+        document.getElementById('btnText').style.display = 'none';
+        document.getElementById('submitBtn').disabled = true;
+    });
+
+    /* ── Show error if Java sets ?error=1 in URL ── */
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('error') === '1') {
+        const msg = document.getElementById('errorMsg');
+        msg.style.display = 'flex';
+        // Shake animation
+        document.querySelector('.login-box').style.animation = 'none';
+        setTimeout(() => {
+            document.getElementById('pwInput').style.borderColor = '#f87171';
+        }, 100);
+    }
+    if (params.get('success') === 'registered') {
+    const success = document.getElementById('successMsg');
+    success.style.display = 'flex';
+}
+</script>
+</body>
+</html>

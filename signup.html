@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up - SetMyGoal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #4F8EF7;
+            --accent2: #a259ff;
+            --accent-grad: linear-gradient(135deg, #4F8EF7 0%, #a259ff 100%);
+            --bg: #0d0f14;
+            --bg2: #13161e;
+            --surface: #1e2330;
+            --surface2: #252b3b;
+            --border: rgba(255,255,255,0.07);
+            --text: #f0f2f8;
+            --text2: #8b92a8;
+            --text3: #5a6180;
+            --navbar-bg: rgba(13,15,20,0.9);
+            --input-bg: #13161e;
+            --label: #9ba3bb;
+            --step-inactive: #2a2f3d;
+        }
+        [data-theme="light"] {
+            --bg: #f4f6fb;
+            --bg2: #edf0f7;
+            --surface: #ffffff;
+            --surface2: #f0f3fa;
+            --border: rgba(0,0,0,0.09);
+            --text: #111827;
+            --text2: #4b5563;
+            --text3: #9ca3af;
+            --navbar-bg: rgba(244,246,251,0.92);
+            --input-bg: #f4f6fb;
+            --label: #6b7280;
+            --step-inactive: #e5e7eb;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-top: 72px;
+            transition: background 0.3s, color 0.3s;
+        }
+        h1,h2,h3,h4,h5,h6 { font-family: 'Sora', sans-serif; color: var(--text); }
+
+        /* ── Navbar ── */
+        .smg-navbar {
+            background: var(--navbar-bg) !important;
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 0;
+            transition: background 0.3s;
+        }
+        .smg-navbar-brand {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text) !important;
+            letter-spacing: -0.5px;
+        }
+        .smg-navbar-brand span {
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .smg-nav-link {
+            color: var(--text2) !important;
+            font-size: 0.88rem;
+            font-weight: 500;
+            padding: 6px 14px !important;
+            border-radius: 8px;
+            transition: color 0.2s, background 0.2s;
+        }
+        .smg-nav-link:hover { color: var(--text) !important; background: var(--surface); }
+        .btn-nav-login {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text) !important;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 7px 18px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .btn-nav-login:hover { border-color: var(--accent); color: var(--accent) !important; }
+        .btn-nav-signup {
+            background: var(--accent-grad);
+            border: none;
+            color: #fff !important;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 7px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .btn-nav-signup:hover { opacity: 0.88; }
+        .btn-theme {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-theme:hover { border-color: var(--accent); }
+
+        /* ── Page Layout ── */
+        .page-wrapper {
+            display: flex;
+            min-height: calc(100vh - 72px);
+        }
+
+        /* Left panel */
+        .left-panel {
+            display: none;
+            width: 420px;
+            flex-shrink: 0;
+            background: linear-gradient(160deg, #0d1220 0%, #141829 100%);
+            border-right: 1px solid var(--border);
+            padding: 60px 48px;
+            position: sticky;
+            top: 72px;
+            height: calc(100vh - 72px);
+            overflow-y: auto;
+        }
+        @media(min-width: 1024px) { .left-panel { display: flex; flex-direction: column; justify-content: center; } }
+        [data-theme="light"] .left-panel {
+            background: linear-gradient(160deg, #e8edf7 0%, #dde5f5 100%);
+        }
+
+        .left-panel-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+        .left-panel-sub {
+            font-size: 0.9rem;
+            color: var(--text2);
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+        .benefit-icon {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            background: rgba(79,142,247,0.12);
+            color: #4F8EF7;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .benefit-title { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+        .benefit-desc  { font-size: 0.8rem; color: var(--text2); line-height: 1.5; }
+
+        /* Right panel / form area */
+        .right-panel {
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 48px 24px 60px;
+            overflow-y: auto;
+        }
+
+        .signup-box {
+            width: 100%;
+            max-width: 540px;
+        }
+
+        /* ── Step Indicator ── */
+        .step-bar {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 36px;
+        }
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            position: relative;
+        }
+        .step-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 16px;
+            left: 50%;
+            right: -50%;
+            height: 2px;
+            background: var(--step-inactive);
+            transition: background 0.3s;
+            z-index: 0;
+        }
+        .step-item.done:not(:last-child)::after {
+            background: var(--accent);
+        }
+        .step-circle {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: var(--step-inactive);
+            color: var(--text3);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.78rem;
+            font-weight: 700;
+            transition: all 0.3s;
+            position: relative; z-index: 1;
+            font-family: 'Sora', sans-serif;
+        }
+        .step-item.active .step-circle {
+            background: var(--accent-grad);
+            color: #fff;
+            box-shadow: 0 0 0 4px rgba(79,142,247,0.2);
+        }
+        .step-item.done .step-circle {
+            background: var(--accent);
+            color: #fff;
+        }
+        .step-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--text3);
+            text-align: center;
+            white-space: nowrap;
+        }
+        .step-item.active .step-label { color: var(--accent); font-weight: 600; }
+        .step-item.done  .step-label  { color: var(--text2); }
+
+        /* ── Form header ── */
+        .form-header { margin-bottom: 28px; }
+        .form-header h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 6px; }
+        .form-header p  { font-size: 0.88rem; color: var(--text2); }
+
+        /* ── Form fields ── */
+        .smg-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--label);
+            margin-bottom: 7px;
+            display: block;
+            letter-spacing: 0.2px;
+        }
+
+        .smg-input, .smg-select {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.9rem;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        .smg-input:focus, .smg-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(79,142,247,0.12);
+        }
+        .smg-input::placeholder { color: var(--text3); }
+        .smg-input.is-valid { border-color: #34d399; }
+        .smg-input.is-error { border-color: #f87171; }
+
+        .input-wrap {
+            position: relative;
+        }
+        .input-icon {
+            position: absolute;
+            right: 14px; top: 50%;
+            transform: translateY(-50%);
+            color: var(--text3);
+            font-size: 1rem;
+            pointer-events: none;
+        }
+        .input-icon.valid { color: #34d399; }
+
+        .select-wrap {
+            position: relative;
+        }
+        .select-wrap::after {
+            content: '\F282';
+            font-family: 'Bootstrap-Icons';
+            position: absolute;
+            right: 14px; top: 50%;
+            transform: translateY(-50%);
+            color: var(--text3);
+            pointer-events: none;
+            font-size: 0.85rem;
+        }
+
+        .field-hint {
+            font-size: 0.75rem;
+            color: var(--text3);
+            margin-top: 5px;
+        }
+
+        /* Password strength */
+        .pw-bar {
+            display: flex; gap: 4px; margin-top: 8px;
+        }
+        .pw-seg {
+            height: 3px; flex: 1; border-radius: 2px;
+            background: var(--step-inactive);
+            transition: background 0.3s;
+        }
+        .pw-text { font-size: 0.72rem; color: var(--text3); margin-top: 4px; }
+
+        /* ── Confusion replacement: Goal Timeline ── */
+        .goal-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .goal-option {
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--input-bg);
+        }
+        .goal-option:hover { border-color: rgba(79,142,247,0.4); }
+        .goal-option.selected { border-color: var(--accent); background: rgba(79,142,247,0.08); }
+        .goal-option input[type="radio"] { display: none; }
+        .goal-option-title { font-size: 0.83rem; font-weight: 600; color: var(--text); }
+        .goal-option-desc  { font-size: 0.72rem; color: var(--text2); margin-top: 2px; }
+
+        /* ── Buttons ── */
+        .btn-submit {
+            width: 100%;
+            background: var(--accent-grad);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 13px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 4px 20px rgba(79,142,247,0.3);
+            margin-top: 8px;
+        }
+        .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .btn-back {
+            width: 100%;
+            background: transparent;
+            color: var(--text2);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 11px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+        .btn-back:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ── Divider ── */
+        .or-divider {
+            display: flex; align-items: center; gap: 12px;
+            margin: 20px 0;
+        }
+        .or-divider::before, .or-divider::after {
+            content: ''; flex: 1; height: 1px; background: var(--border);
+        }
+        .or-divider span { font-size: 0.78rem; color: var(--text3); white-space: nowrap; }
+
+        /* ── Info banner ── */
+        .info-banner {
+            background: rgba(79,142,247,0.08);
+            border: 1px solid rgba(79,142,247,0.2);
+            border-radius: 10px;
+            padding: 12px 14px;
+            display: flex; gap: 10px; align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        .info-banner i { color: var(--accent); font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+        .info-banner p { font-size: 0.8rem; color: var(--text2); margin: 0; line-height: 1.5; }
+
+        /* ── Step panels ── */
+        .step-panel { display: none; }
+        .step-panel.active { display: block; animation: fadeSlide 0.3s ease both; }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateX(16px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ── Login link ── */
+        .login-link {
+            text-align: center;
+            font-size: 0.83rem;
+            color: var(--text2);
+            margin-top: 20px;
+        }
+        .login-link a { color: var(--accent); text-decoration: none; font-weight: 600; }
+        .login-link a:hover { text-decoration: underline; }
+
+        /* ── Stream tags ── */
+        .stream-options {
+            display: flex; flex-wrap: wrap; gap: 8px;
+        }
+        .stream-tag {
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--text2);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--input-bg);
+            user-select: none;
+        }
+        .stream-tag:hover  { border-color: rgba(79,142,247,0.4); color: var(--text); }
+        .stream-tag.active { border-color: var(--accent); background: rgba(79,142,247,0.1); color: var(--accent); font-weight: 600; }
+
+        /* Hidden field for stream */
+        #streamInput { display: none; }
+    </style>
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar navbar-expand-lg smg-navbar fixed-top">
+    <div class="container">
+        <a class="navbar-brand smg-navbar-brand" href="index.html">Set<span>My</span>Goal</a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#authNav">
+            <i class="bi bi-list" style="font-size:1.4rem;color:var(--text)"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="authNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link smg-nav-link" href="index.html">Home</a></li>
+            </ul>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn-theme" id="themeToggle"><span id="themeIcon">🌙</span></button>
+                <a href="login.html" class="btn-nav-login">Login</a>
+                <a href="signup.html" class="btn-nav-signup">Sign up</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="page-wrapper">
+
+    <!-- ── Left Panel ── -->
+    <div class="left-panel">
+        <div>
+            <p style="font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Why Join Us</p>
+            <h2 class="left-panel-title">Your career journey starts with one step.</h2>
+            <p class="left-panel-sub">Tell us about yourself and we'll build a personalized roadmap just for you — free, in under 2 minutes.</p>
+
+            <div class="benefit-item">
+                <div class="benefit-icon"><i class="bi bi-map-fill"></i></div>
+                <div>
+                    <div class="benefit-title">Personalized Roadmap</div>
+                    <div class="benefit-desc">Step-by-step path based on your standard, board & interests.</div>
+                </div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon" style="background:rgba(162,89,255,0.12);color:#a259ff"><i class="bi bi-graph-up-arrow"></i></div>
+                <div>
+                    <div class="benefit-title">Market Scope & Salary</div>
+                    <div class="benefit-desc">See real demand, salary ranges & growth for every career.</div>
+                </div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon" style="background:rgba(52,211,153,0.12);color:#34d399"><i class="bi bi-check2-circle"></i></div>
+                <div>
+                    <div class="benefit-title">Daily Tasks & Streaks</div>
+                    <div class="benefit-desc">Stay consistent with daily goals and keep your streak alive.</div>
+                </div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon" style="background:rgba(251,191,36,0.12);color:#fbbf24"><i class="bi bi-robot"></i></div>
+                <div>
+                    <div class="benefit-title">AI-Based Suggestions</div>
+                    <div class="benefit-desc">Smart career suggestions based on your profile & interests.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Right Panel ── -->
+    <div class="right-panel">
+        <div class="signup-box">
+
+            <!-- Step bar -->
+            <div class="step-bar">
+                <div class="step-item active" id="s1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Account</div>
+                </div>
+                <div class="step-item" id="s2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Education</div>
+                </div>
+                <div class="step-item" id="s3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Goals</div>
+                </div>
+            </div>
+
+            <form action="register" method="post" id="signupForm">
+
+                <!-- ════ Step 1: Account ════ -->
+                <div class="step-panel active" id="panel1">
+                    <div class="form-header">
+                        <h2>Create your account</h2>
+                        <p>Start with the basics — it takes less than 2 minutes.</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="smg-label">Full Name</label>
+                        <div class="input-wrap">
+                            <input type="text" name="full_name" id="fullName" class="smg-input" required placeholder="e.g. Riya Sharma">
+                            <i class="bi bi-person input-icon" id="nameIcon"></i>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="smg-label">Email Address</label>
+                        <div class="input-wrap">
+                            <input type="email" name="email" id="emailInput" class="smg-input" required placeholder="you@example.com">
+                            <i class="bi bi-envelope input-icon" id="emailIcon"></i>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="smg-label">Password</label>
+                        <div class="input-wrap">
+                            <input type="password" name="password" id="pwInput" class="smg-input" required placeholder="Create a strong password" style="padding-right:42px">
+                            <i class="bi bi-eye-slash input-icon" id="pwToggle" style="pointer-events:auto;cursor:pointer;" onclick="togglePw()"></i>
+                        </div>
+                        <div class="pw-bar" id="pwBar">
+                            <div class="pw-seg" id="pw1"></div>
+                            <div class="pw-seg" id="pw2"></div>
+                            <div class="pw-seg" id="pw3"></div>
+                            <div class="pw-seg" id="pw4"></div>
+                        </div>
+                        <div class="pw-text" id="pwText">Enter a password to check strength</div>
+                    </div>
+
+                    <button type="button" class="btn-submit" onclick="goStep(2)">
+                        Continue <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+
+                    <div class="login-link">Already have an account? <a href="login.html">Log in instead</a></div>
+                </div>
+
+                <!-- ════ Step 2: Education ════ -->
+                <div class="step-panel" id="panel2">
+                    <div class="form-header">
+                        <h2>Your education details</h2>
+                        <p>This helps us match you with the right roadmap.</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="smg-label">Standard / Class</label>
+                        <div class="select-wrap">
+                            <select name="standard" id="standardSelect" class="smg-select" onchange="updateBoards()">
+                                <optgroup label="School">
+                                    <option value="8th">8th Standard</option>
+                                    <option value="9th">9th Standard</option>
+                                    <option value="10th" selected>10th Standard</option>
+                                </optgroup>
+                                <optgroup label="Higher Secondary">
+                                    <option value="11th_science">11th — Science</option>
+                                    <option value="11th_commerce">11th — Commerce</option>
+                                    <option value="11th_arts">11th — Arts / Humanities</option>
+                                    <option value="12th_science">12th — Science</option>
+                                    <option value="12th_commerce">12th — Commerce</option>
+                                    <option value="12th_arts">12th — Arts / Humanities</option>
+                                </optgroup>
+                                <optgroup label="Graduation">
+                                    <option value="grad_1st">Graduation — 1st Year</option>
+                                    <option value="grad_2nd">Graduation — 2nd Year</option>
+                                    <option value="grad_3rd">Graduation — 3rd Year</option>
+                                    <option value="grad_final">Graduation — Final Year</option>
+                                </optgroup>
+                                <optgroup label="Post Graduation">
+                                    <option value="pg">Post Graduation</option>
+                                    <option value="dropout">Dropped Out / Other</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="smg-label">Board / University</label>
+                        <div class="select-wrap">
+                            <select name="board" id="boardSelect" class="smg-select"></select>
+                        </div>
+                        <div class="field-hint" id="boardHint">Auto-updated based on your standard.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="smg-label">Medium of Instruction</label>
+                        <div class="select-wrap">
+                            <select name="medium" class="smg-select">
+                                <option value="English">English</option>
+                                <option value="Hindi">Hindi</option>
+                                <option value="Marathi">Marathi</option>
+                                <option value="Gujarati">Gujarati</option>
+                                <option value="Bengali">Bengali</option>
+                                <option value="Tamil">Tamil</option>
+                                <option value="Telugu">Telugu</option>
+                                <option value="Kannada">Kannada</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="smg-label">State / Location</label>
+                        <div class="select-wrap">
+                            <select name="state" class="smg-select">
+                                <option value="">Select your state</option>
+                                <option>Maharashtra</option><option>Delhi</option><option>Karnataka</option>
+                                <option>Tamil Nadu</option><option>Uttar Pradesh</option><option>Gujarat</option>
+                                <option>Rajasthan</option><option>West Bengal</option><option>Andhra Pradesh</option>
+                                <option>Telangana</option><option>Kerala</option><option>Madhya Pradesh</option>
+                                <option>Bihar</option><option>Punjab</option><option>Haryana</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-submit" onclick="goStep(3)">
+                        Continue <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                    <button type="button" class="btn-back" onclick="goStep(1)">
+                        <i class="bi bi-arrow-left me-1"></i> Back
+                    </button>
+                </div>
+
+                <!-- ════ Step 3: Goals ════ -->
+                <div class="step-panel" id="panel3">
+                    <div class="form-header">
+                        <h2>Your interests & goals</h2>
+                        <p>This powers your personalized roadmap and AI suggestions.</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="smg-label">Main Interest / Passion</label>
+                        <div class="input-wrap">
+                            <input type="text" name="interest" class="smg-input" placeholder="e.g. Coding, Medicine, Drawing, Finance...">
+                        </div>
+                        <div class="field-hint">Type what you enjoy most — even a hobby counts!</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="smg-label">Preferred Career Stream</label>
+                        <div class="stream-options" id="streamOptions">
+                            <div class="stream-tag" onclick="selectStream(this,'Science')">🔬 Science</div>
+                            <div class="stream-tag" onclick="selectStream(this,'Commerce')">📊 Commerce</div>
+                            <div class="stream-tag" onclick="selectStream(this,'Arts')">🎨 Arts / Humanities</div>
+                            <div class="stream-tag" onclick="selectStream(this,'Technology')">💻 Technology / IT</div>
+                            <div class="stream-tag" onclick="selectStream(this,'Government')">🏛️ Government / UPSC</div>
+                            <div class="stream-tag" onclick="selectStream(this,'Defence')">🎖️ Defence / NDA</div>
+                            <div class="stream-tag" onclick="selectStream(this,'Law')">⚖️ Law</div>
+                            <div class="stream-tag" onclick="selectStream(this,'NotSure')">🤔 Not Sure Yet</div>
+                        </div>
+                        <input type="hidden" name="career_stream" id="streamInput">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="smg-label">When do you want to achieve your career goal?</label>
+                        <div class="goal-options" id="goalTimelineOptions">
+                            <label class="goal-option" onclick="selectGoal(this,'1-2 years')">
+                                <input type="radio" name="goal_timeline" value="1-2 years">
+                                <div class="goal-option-title">⚡ 1–2 Years</div>
+                                <div class="goal-option-desc">Diploma, short courses, direct entry</div>
+                            </label>
+                            <label class="goal-option" onclick="selectGoal(this,'3-4 years')">
+                                <input type="radio" name="goal_timeline" value="3-4 years">
+                                <div class="goal-option-title">🎓 3–4 Years</div>
+                                <div class="goal-option-desc">Bachelor's degree, B.Tech, BCA</div>
+                            </label>
+                            <label class="goal-option" onclick="selectGoal(this,'5-7 years')">
+                                <input type="radio" name="goal_timeline" value="5-7 years">
+                                <div class="goal-option-title">🏥 5–7 Years</div>
+                                <div class="goal-option-desc">MBBS, LLB, CA, MBA path</div>
+                            </label>
+                            <label class="goal-option" onclick="selectGoal(this,'Not sure')">
+                                <input type="radio" name="goal_timeline" value="Not sure">
+                                <div class="goal-option-title">🤷 Still Exploring</div>
+                                <div class="goal-option-desc">Help me figure out the right path</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="smg-label">Preparation Level</label>
+                        <div class="select-wrap">
+                            <select name="prep_level" class="smg-select">
+                                <option value="not_started">Haven't started yet</option>
+                                <option value="just_started">Just started exploring</option>
+                                <option value="in_progress">Already preparing</option>
+                                <option value="advanced">Seriously preparing / coaching</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="info-banner">
+                        <i class="bi bi-shield-check"></i>
+                        <p>Your data is safe and used only to personalize your roadmap. We never share it with anyone.</p>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <i class="bi bi-rocket-takeoff me-2"></i>Create My Account & Roadmap
+                    </button>
+                    <button type="button" class="btn-back" onclick="goStep(2)">
+                        <i class="bi bi-arrow-left me-1"></i> Back
+                    </button>
+                </div>
+
+            </form>
+
+            <div class="login-link" id="bottomLoginLink" style="display:none;">Already have an account? <a href="login.html">Log in instead</a></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* ── Theme ── */
+const html = document.documentElement;
+const saved = localStorage.getItem('smg-theme') || 'dark';
+html.setAttribute('data-theme', saved);
+document.getElementById('themeIcon').textContent = saved === 'dark' ? '🌙' : '☀️';
+document.getElementById('themeToggle').addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    document.getElementById('themeIcon').textContent = next === 'dark' ? '🌙' : '☀️';
+    localStorage.setItem('smg-theme', next);
+});
+
+/* ── Steps ── */
+let currentStep = 1;
+function goStep(n) {
+    document.getElementById('panel' + currentStep).classList.remove('active');
+    document.getElementById('s' + currentStep).classList.remove('active');
+    if (n > currentStep) document.getElementById('s' + currentStep).classList.add('done');
+    else document.getElementById('s' + (currentStep)).classList.remove('done');
+
+    currentStep = n;
+    document.getElementById('panel' + n).classList.add('active');
+    document.getElementById('s' + n).classList.add('active');
+    document.getElementById('s' + n).classList.remove('done');
+
+    // Mark previous steps done
+    for (let i = 1; i < n; i++) document.getElementById('s'+i).classList.add('done');
+
+    // Show bottom login link only on non-step-1
+    document.getElementById('bottomLoginLink').style.display = n > 1 ? 'block' : 'none';
+    window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ── Password strength ── */
+const pwInput = document.getElementById('pwInput');
+const segs = [document.getElementById('pw1'),document.getElementById('pw2'),document.getElementById('pw3'),document.getElementById('pw4')];
+const pwText = document.getElementById('pwText');
+const colors = ['#f87171','#fb923c','#fbbf24','#34d399'];
+const labels = ['Weak','Fair','Good','Strong'];
+
+pwInput.addEventListener('input', () => {
+    const v = pwInput.value;
+    let score = 0;
+    if (v.length >= 6) score++;
+    if (v.length >= 10) score++;
+    if (/[A-Z]/.test(v) && /[0-9]/.test(v)) score++;
+    if (/[^A-Za-z0-9]/.test(v)) score++;
+    segs.forEach((s,i) => s.style.background = i < score ? colors[score-1] : 'var(--step-inactive)');
+    pwText.textContent = v.length ? labels[score-1] + ' password' : 'Enter a password to check strength';
+    pwText.style.color = v.length ? colors[score-1] : 'var(--text3)';
+});
+
+/* ── Toggle password visibility ── */
+function togglePw() {
+    const t = pwInput.type === 'password' ? 'text' : 'password';
+    pwInput.type = t;
+    document.getElementById('pwToggle').className = `bi bi-eye${t==='text'?'':'-slash'} input-icon`;
+}
+
+/* ── Email live validation ── */
+document.getElementById('emailInput').addEventListener('input', function() {
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value);
+    document.getElementById('emailIcon').className = 'bi bi-envelope' + (ok ? '-check' : '') + ' input-icon' + (ok ? ' valid' : '');
+});
+
+/* ── Board data ── */
+const boardData = {
+    school:  ['CBSE','ICSE / CISCE','Maharashtra State Board (SSC)','UP Board','RBSE (Rajasthan)','PSEB (Punjab)','HBSE (Haryana)','Gujarat Board (GSEB)','West Bengal Board','Karnataka SSLC','Tamil Nadu Board','Telangana Board','Bihar Board (BSEB)','Other State Board'],
+    hsc:     ['Maharashtra HSC Board','CBSE (12th)','CISCE (ISC)','UP Intermediate Board','Gujarat HSC Board','RBSE (12th)','Karnataka PUC','Tamil Nadu HSC','West Bengal HS Board','Telangana Intermediate','Bihar Intermediate (BIEC)','Other State Board'],
+    grad:    ['Mumbai University','Pune University (SPPU)','Delhi University (DU)','Osmania University','Anna University','Bangalore University','Calcutta University','Rajasthan University','Nagpur University (RTMNU)','Shivaji University','IGNOU (Distance)','Other University'],
+    pg:      ['IIT / NIT / IIIT','IIM / Top MBA','Mumbai University (PG)','Pune University (PG)','Delhi University (PG)','IGNOU (PG Distance)','Other University'],
+};
+
+function updateBoards() {
+    const val = document.getElementById('standardSelect').value;
+    const sel = document.getElementById('boardSelect');
+    const hint = document.getElementById('boardHint');
+    let list = [];
+    if (['8th','9th','10th'].includes(val)) { list = boardData.school; hint.textContent = 'Select your school board.'; }
+    else if (val.startsWith('11th') || val.startsWith('12th')) { list = boardData.hsc; hint.textContent = 'Select your HSC / Intermediate board.'; }
+    else if (val.startsWith('grad')) { list = boardData.grad; hint.textContent = 'Select your college university.'; }
+    else if (['pg','dropout'].includes(val)) { list = boardData.pg; hint.textContent = 'Select your university.'; }
+
+    sel.innerHTML = list.map(b => `<option value="${b}">${b}</option>`).join('');
+}
+updateBoards(); // init on load
+
+/* ── Stream select ── */
+function selectStream(el, val) {
+    document.querySelectorAll('.stream-tag').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('streamInput').value = val;
+}
+
+/* ── Goal timeline ── */
+function selectGoal(el, val) {
+    document.querySelectorAll('.goal-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+}
+</script>
+</body>
+</html>

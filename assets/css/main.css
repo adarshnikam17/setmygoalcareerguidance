@@ -1,0 +1,140 @@
+/* Theme tokens */
+:root {
+    --smg-bg: #f8fafc;
+    --smg-bg-alt: #e5e7eb;
+    --smg-text: #020617;
+    --smg-text-muted: #6b7280;
+    --smg-surface: #ffffff;
+    --smg-surface-soft: #f3f4f6;
+    --smg-border: rgba(148, 163, 184, 0.4);
+    --smg-primary: #38bdf8;
+    --smg-primary-soft: rgba(56, 189, 248, 0.12);
+    --smg-primary-strong: #0ea5e9;
+    --smg-accent: #a855f7;
+    --smg-danger: #ef4444;
+    --smg-radius-lg: 18px;
+    --smg-radius-md: 12px;
+    --smg-radius-pill: 999px;
+    --smg-shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.08);
+    --smg-navbar-bg: rgba(15, 23, 42, 0.9);
+}
+
+[data-theme="dark"] {
+    --smg-bg: #020617;
+    --smg-bg-alt: #020617;
+    --smg-text: #e5e7eb;
+    --smg-text-muted: #9ca3af;
+    --smg-surface: radial-gradient(circle at top left, #111827, #020617);
+    --smg-surface-soft: #020617;
+    --smg-border: rgba(148, 163, 184, 0.25);
+    --smg-shadow-soft: 0 20px 45px rgba(15, 23, 42, 0.9);
+    --smg-navbar-bg: rgba(15, 23, 42, 0.97);
+}
+
+body {
+    background-color: var(--smg-bg);
+    color: var(--smg-text);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Shared navbar */
+.smg-navbar {
+    background: var(--smg-navbar-bg);
+    backdrop-filter: blur(12px);
+}
+
+.smg-navbar-brand {
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
+.smg-navbar-brand span {
+    color: var(--smg-primary);
+}
+
+.smg-nav-link {
+    font-size: 0.9rem;
+}
+
+.smg-nav-link.active {
+    color: var(--smg-primary-strong) !important;
+    border-bottom: 2px solid var(--smg-primary-strong);
+}
+
+.smg-btn-primary {
+    background: linear-gradient(90deg, var(--smg-primary), var(--smg-accent));
+    border: none;
+    color: white;
+}
+
+.smg-btn-primary:hover {
+    filter: brightness(1.05);
+}
+
+.smg-btn-ghost {
+    border-radius: var(--smg-radius-pill);
+    border: 1px solid var(--smg-border);
+    background: transparent;
+    color: var(--smg-text);
+}
+
+.smg-card {
+    background: var(--smg-surface);
+    border-radius: var(--smg-radius-lg);
+    border: 1px solid var(--smg-border);
+    box-shadow: var(--smg-shadow-soft);
+}
+
+.smg-chip {
+    border-radius: var(--smg-radius-pill);
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    border: 1px solid var(--smg-border);
+    background: var(--smg-surface-soft);
+}
+
+.smg-hero {
+    min-height: 88vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.smg-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.18), transparent 55%);
+    pointer-events: none;
+}
+
+.smg-hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.smg-text-muted {
+    color: var(--smg-text-muted) !important;
+}
+
+.smg-pill {
+    border-radius: var(--smg-radius-pill);
+    padding: 3px 10px;
+    font-size: 0.7rem;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.smg-switch {
+    border-radius: 999px;
+    padding: 2px;
+    background: rgba(15,23,42,0.9);
+    border: 1px solid rgba(148,163,184,0.45);
+}
+
+.smg-switch-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: white;
+}
