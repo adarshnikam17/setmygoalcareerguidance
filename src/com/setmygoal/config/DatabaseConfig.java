@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class DatabaseConfig {
 
-    private static final String URL      = "jdbc:mysql://127.0.0.1:3306/setmygoal";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "YOUR_DB_PASSWORD";
+    private static final String URL      = "jdbc:mysql://jqe3iy.h.filess.io:61031/setmygoal_bitegently?useSSL=false&allowPublicKeyRetrieval=true";
+    private static final String USERNAME = "setmygoal_bitegently";
+    private static final String PASSWORD = "b6e23ac82a6b1580d50bb6b23b1d9fdf1a3820fb";
 
     static {
         try {
