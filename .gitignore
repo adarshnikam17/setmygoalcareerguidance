@@ -1,23 +1,19 @@
-# Compiled class files
-*.class
-
-# Build folders
-/build/
-/out/
-/dist/
+# Compiled classes
+WEB-INF/classes/
 
 # IDE files
-.idea/
 .vscode/
-
-# Logs
-*.log
+.idea/
+*.iml
 
 # OS files
 .DS_Store
 Thumbs.db
 
-# Tomcat generated
-work/
-temp/
+# Logs
+*.log
+logs/
 
+# Temp
+temp/
+work/
